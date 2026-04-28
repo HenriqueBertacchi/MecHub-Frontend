@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>MecHub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
+  <style>
+    
+/* RESET BÁSICO */
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #000;
+  color: white;
+  overflow-x: hidden;
+}
+
+/* NAVBAR - AJUSTE DE CENTRALIZAÇÃO */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 5%;
+  width: 100%;
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  flex-wrap: nowrap;
+}
+
+/* Faz a Logo e os Botões ocuparem o mesmo espaço nas pontas */
+.navbar h1 {
+  flex: 1; 
+  margin: 0;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 28px;
+}
+
+/* O MENU FICA CRAVADO NO MEIO */
+.navbar nav {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex: 2; /* Dá mais importância para o centro */
+   min-width: 0; /* 🔥 ESSENCIAL */
+  gap: clamp(10px, 2vw, 30px);
+}
+
+/* OS BOTÕES OCUPAM O MESMO QUE A LOGO */
+/* CONTAINER DOS BOTÕES */
+.buttons {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end; /* Alinha tudo na ponta direita */
+  gap: 10px;
+  align-items: center; /* Garante que os botões fiquem alinhados na altura */
+  min-width: max-content;
+  flex-wrap: nowrap;
+}
+
+/* LINKS DO MENU (Serviços, etc) */
+.navbar nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  white-space: nowrap;
+  border-bottom: 2px solid white; 
+  padding-bottom: 5px; 
+}
+
+/* ESTILO DOS BOTÕES */
+.buttons button {
+  padding: 0px 10px;
+  height: 40px;      /* Trava a altura para não ficar quadrado */
+  min-width: 0px;  /* Garante o tamanho padrão pros três */
+  display: flex;
+  justify-content: center; /* Centraliza o texto horizontalmente */
+  align-items: center;     /* Centraliza o texto verticalmente */
+  border-radius: 8px;
+  cursor: pointer;
+  text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+  white-space: nowrap;
+}
+
+/* Garante que os links dentro dos botões não fiquem azuis */
+.buttons a {
+  text-decoration: none;
+  color: inherit;
+}
+.primary {
+  background: #DC143C;
+  color: white;
+  border: none;
+}
+.outline {
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+}
+
+/* HERO */
+.hero {
+  position: relative; /* Permite usar elementos absolutos dentro (bg, overlay) */
+  height: 500px; /* Altura da seção */
+  width: 100%; /* Ocupa toda largura da tela */
+  display: flex; /* Ativa flexbox */
+  align-items: center; /* Centraliza conteúdo na vertical */
+  overflow: hidden; /* Esconde o que passar da área */
+}
+
+.hero .bg {
+  position: absolute; /* Fica solto dentro do .hero */
+  top: 0; /* Cola no topo */
+  left: 0; /* Cola na esquerda */
+  width: 100vw; /* Largura total da tela */
+  height: 100%; /* Altura igual ao .hero */
+  object-fit: cover; /* Faz a imagem preencher sem distorcer */
+  object-position: center; /* Centraliza a imagem */
+  filter: brightness(30%); /* Escurece a imagem */
+}
+
+.overlay {
+  position: absolute; /* Fica sobre a imagem */
+  width: 100%; /* Cobre toda largura */
+  height: 100%; /* Cobre toda altura */
+  background: rgba(0,0,0,0.85); /* Camada preta transparente */
+}
+
+.hero .container {
+  display: flex; /* Coloca itens lado a lado */
+  align-items: center; /* Alinha verticalmente */
+  gap: 0px; /* Espaço entre os itens */
+  max-width: 1200px; /* Limite de largura */
+  margin: 80px auto 0 auto; /* Centraliza horizontal + espaço no topo */
+  padding: 0 5%; /* Espaço interno lateral */
+  position: relative; /* Mantém dentro da hierarquia */
+  z-index: 5; /* Fica na frente do overlay e imagem */
+}
+
+/* 🔥 LOGO VERTICAL  */
+.logo-vertical {
+  position: relative; /* Fica no fluxo normal */
+  writing-mode: vertical-rl; /* Texto na vertical */
+  transform: rotate(180deg); /* Vira de cabeça pra cima */
+  white-space: nowrap; /* Impede quebra de linha */
+  font-size: clamp(35px, 5vw, 58px) !important; /* Tamanho responsivo */
+  font-weight: bold; /* Negrito */
+  color: #DC143C; /* Cor vermelha */
+  font-family: 'Archivo Black', sans-serif; /* Fonte */
+  text-shadow: 2px 2px 10px rgba(0,0,0,0.8); /* Sombra no texto */
+  line-height: 1; /* Espaçamento entre linhas */
+  margin-right: -4px;/* aproxima mais o texto */
+}
+
+.hero-content {
+  position: relative; /* Mantém organização interna */
+  max-width: 650px; /* Limita largura do texto */
+  display: flex; /* Ativa flex */
+  flex-direction: column; /* Coloca elementos em coluna */
+}
+
+.hero h2 {
+  font-size: clamp(28px, 4.5vw, 50px) !important; /* Tamanho responsivo */
+  text-shadow: 2px 2px 10px rgba(0,0,0,0.8); /* Sombra */
+  margin-bottom: 0px; /* Remove espaço abaixo */
+  font-family: 'Archivo Black', sans-serif; /* Fonte */
+  line-height: 1.1; /* Altura da linha */
+}
+
+.hero p {
+  text-shadow: 1px 1px 5px rgba(0,0,0,0.8); /* Sombra leve */
+  margin-top: 10px; /* Espaço acima */
+  font-size: clamp(18px, 2.8vw, 32px) !important; /* Tamanho responsivo */
+  font-family: 'Archivo Black', sans-serif; /* Fonte */
+}
+
+.hero span {
+  color: #DC143C; /* Destaca palavras em vermelho */
+}
+
+/* SERVIÇOS */
+.services {
+  text-align: center;
+  padding: 40px;
+}
+
+.services h3 {
+  background: #DC143C;
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: 'Archivo Black', sans-serif;
+}
+
+.grid {
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+
+}
+
+.card {
+  background: #1a1a1a;       /* Mesmo tom de cinza escuro dos benefícios */
+  padding: 25px;
+  border-radius: 15px;
+  border: 1px solid #333;    /* Linha de contorno sutil igual ao protótipo */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: 0.3s;
+}
+
+.card h4 {
+  margin: 0 0 10px 0;
+  font-size: 20px;
+  font-family: 'Archivo Black', sans-serif; /* Fonte pesada igual ao título principal */
+  color: white;
+}
+
+.card p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #ccc;               /* Texto cinza claro para não brigar com o título */
+}
+
+/*  */
+.icon-circle {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px auto;
+  flex-shrink: 0;
+}
+
+.icon-circle img {
+  width: 55px; 
+  height: 55px;
+  object-fit: contain;
+}
+
+/* PALETA DE CORES DOS SERVIÇOS */
+.bg-vermelho { background-color: #d3122a; }
+.bg-roxo     { background-color: #6a53f5; }
+.bg-amarelo  { background-color: #e2f52c; } /* Verde-limão/Amarelo do print */
+.bg-verde    { background-color: #64dd17; }
+.bg-azul     { background-color: #4d61fc; }
+.bg-laranja  { background-color: #e67e22; }
+
+
+/* BENEFICIOS  */
+.benefits {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: #000;
+}
+
+.benefits h3 {
+  background: #DC143C;
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: 'Archivo Black', sans-serif;
+  margin-bottom: 40px;
+  color: white;
+}
+
+/* ESTE É O PAI QUE COMANDA O LAYOUT */
+.grid-benefits {
+  display: grid;
+  /* Cria 2 colunas de tamanhos iguais (1fr cada) */
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 20px; /* Espaçamento entre os cards */
+  width: 100%;
+  max-width: 1200px; /* Opcional: evita que os cards estiquem demais em monitores ultra-wide */
+  margin: 0 auto;    /* Centraliza o grid todo na tela */
+}
+
+/* O SEU CARD (FILHO) */
+.card-benefit {
+  background: #1a1a1a;
+  padding: 25px;
+  border-radius: 15px;
+  display: flex;         
+  align-items: center;   
+  text-align: left;
+  gap: 20px;
+  border: 1px solid #333;
+  min-height: 120px;
+  
+  /* Garante que o card ocupe o espaço da coluna do grid */
+  width: 100%; 
+  box-sizing: border-box; 
+}
+
+.card-benefit img {
+  width: 65px;           /* Aumentamos um pouquinho a base geral */
+  height: 65px;          
+  object-fit: contain;   
+  flex-shrink: 0;
+  transition: 0.3s;      /* Suaviza se você quiser colocar um hover depois */
+}
+
+/* Ajustes individuais "no olho" para equilibrar os tamanhos */
+
+/* 1. O Globo (Acessibilidade) - Geralmente precisa de mais zoom */
+.card-benefit:nth-child(1) img {
+  transform: scale(1.40); 
+}
+
+/* 2. A Prancheta (Organização) - Costuma ser mais alta, 1.1 já deve bastar */
+.card-benefit:nth-child(2) img {
+  transform: scale(1.1);
+}
+
+/* 3. A Caixa (Controle de Peças) - Pode crescer um pouco também */
+.card-benefit:nth-child(3) img {
+  transform: scale(1.15);
+}
+
+/* 4. O Celular (Transparência) - Segue o padrão do globo */
+.card-benefit:nth-child(4) img {
+  transform: scale(1.2);
+}
+
+.info-benefit h4 {
+  margin: 0 0 5px 0;
+  font-size: 20px;
+  font-family: 'Archivo Black', sans-serif;
+  color: white;
+}
+
+.info-benefit p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.4;
+  color: #ccc;
+}
+
+/* AJUSTE QUEM SOMOS */
+/* ABOUT */
+.about {
+  padding: 60px 20px;
+  text-align: center;
+  background-color: #000;
+}
+
+.about h3 {
+  background: #DC143C;
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 8px;
+  margin-bottom: 40px;
+  font-family: 'Archivo Black', sans-serif;
+  color: white;
+}
+
+.about-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Mudado de flex-start para space-between */
+  max-width: 1100px;
+  margin: 0 auto;
+  gap: 50px;       /* Aumentei o espaço entre texto e imagem */
+  padding: 40px;   /* Adicionei padding para criar o "card" que conversamos */
+
+}
+
+.texto {
+  flex: 1;           /* O texto cresce e diminui conforme o espaço */
+  min-width: 0;      /* IMPORTANTE: Permite que o texto encolha sem empurrar a imagem */
+  text-align: left;
+}
+
+.texto p {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  /* Faz o texto quebrar linha em vez de passar por cima da imagem */
+  word-wrap: break-word; 
+}
+
+.about img {
+  width: 600px;      /* Aumentei de 380px para 450px */
+  height: auto;
+  flex-shrink: 0;    /* IMPEDE que o texto esmague a imagem */
+  border-radius: 15px;
+  object-fit: cover;
+  display: block;
+}
+
+/* AJUSTE PARA TELAS MÉDIAS (TABLETS) */
+@media (max-width: 950px) {
+ .hero .container {
+    gap: 15px;
+  }
+
+  .logo-vertical {
+    font-size: 40px !important;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* AJUSTE PARA CELULARES - RESOLVE SOBREPOSIÇÃO E TAMANHO */
+@media (max-width: 850px) {
+  .navbar {
+    display: grid;
+    grid-template-areas:
+      "logo botoes"
+      "menu menu";
+    grid-template-columns: 1fr 1fr;
+    row-gap: 15px;
+    overflow: hidden;
+  }
+  
+   .navbar h1 {
+    grid-area: logo;
+  }
+
+  .navbar nav {
+    grid-area: menu;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    max-width: 100%;
+  }
+  .navbar nav a {
+    font-size: 14px;
+  }
+  .buttons {
+    grid-area: botoes;
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+    flex-wrap: nowrap;  /* 🔥 NÃO deixa quebrar */
+  }
+  
+  .buttons button {
+    min-width: 0;     /* tira aquele tamanho fixo */
+    padding: 0 8px;      /* menor */
+    font-size: 13px;     /* menor */
+    height: 35px;        /* menor */
+  }
+
+
+  .grid-benefits {
+    grid-template-columns: 1fr;
+  }
+
+  .about-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .about img {
+    width: 100%;
+    max-width: 400px;
+  }
+}
+  </style>
+</head>
+
+<body>
+
+<header class="navbar">
+  <h1>MecHub</h1>
+
+  <nav>
+    <a href="#">Serviços</a>
+    <a href="#">Benefícios</a>
+    <a href="#">Quem somos</a>
+  </nav>
+
+  <div class="buttons">
+    <a href="consulta.html"><button class="outline">Consultar</button></a>
+    <a href="cadastro.html"><button class="outline">Criar Conta</button></a>
+    <a href="login.html"><button class="primary">Entrar</button></a>
+  </div>
+  
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="overlay"></div>
+
+    <img src="https://i.imgur.com/tgvhBan.jpeg" class="bg">
+
+    <div class="container">
+      <h1 class="logo-vertical">MecHub</h1>
+
+      <div class="hero-content">
+        <h2>Inove sua oficina</h2>
+        <p>
+          Mais <span>transparência</span> para o cliente,
+          e <span>eficiência</span> para o mecânico.
+        </p>
+      </div>
+    </div>
+  </section>
+
+<!-- SERVIÇOS -->
+<section class="services">
+  <h3>Serviços Oferecidos</h3>
+
+  <div class="grid">
+  <div class="card">
+    <div class="icon-circle bg-vermelho">
+      <img src="https://i.imgur.com/W8jQ1TQ.png">
+    </div>
+    <h4>Autopeças</h4>
+    <p>Controle e <strong>Organize</strong> seu estoque de peças</p>
+  </div>
+
+  <div class="card">
+    <div class="icon-circle bg-roxo">
+      <img src="https://i.imgur.com/BuuTJ4Z.png">
+    </div>
+    <h4>Oficina</h4>
+    <p>Registre os <strong>serviços de reparos</strong> realizados, para maior <strong>controle</strong></p>
+  </div>
+
+  <div class="card">
+    <div class="icon-circle bg-amarelo">
+      <img src="https://i.imgur.com/ObGeTOn.png">
+    </div>
+    <h4>Comunicação</h4>
+    <p><strong>Mantenha</strong> seus <strong>clientes</strong> sempre atualizados. Evite surpresas</p>
+  </div>
+
+  <div class="card">
+    <div class="icon-circle bg-verde">
+      <img src="https://i.imgur.com/QtbZnXP.png">
+    </div>
+    <h4>Segurança</h4>
+    <p>Mais <strong>segurança</strong> para o <strong>cliente</strong> e para o <strong>mecânico</strong></p>
+  </div>
+
+  <div class="card">
+    <div class="icon-circle bg-azul">
+      <img src="https://i.imgur.com/oGHLF2G.png">
+    </div>
+    <h4>Acessibilidade</h4>
+    <p>Pensamos em <strong>você</strong>. Contamos com recursos de <strong>acessibilidade inclusiva</strong></p>
+  </div>
+
+  <div class="card">
+    <div class="icon-circle bg-laranja">
+      <img src="https://i.imgur.com/MlYFt6A.png">
+    </div>
+    <h4>Flexibilidade</h4>
+    <p>Acompanhe seu veículo de <strong>qualquer lugar</strong></p>
+  </div>
+</div>
+</section>
+
+
+<!-- BENEFICIOS  -->
+
+<section class="benefits">
+  <h3>Por que a MecHub?</h3>
+  
+  <div class="grid-benefits">
+    <div class="card-benefit">
+      <img src="https://i.imgur.com/HG24DYP.png" alt="Acessibilidade">
+      <div class="info-benefit">
+        <h4>Acessibilidade</h4>
+        <p>Sistema web acessível de qualquer lugar, proporcionando consulta e atualização fácil das informações.</p>
+      </div>
+    </div>
+
+    <div class="card-benefit">
+      <img src="https://i.imgur.com/nFKKsuF.png" alt="Organização">
+      <div class="info-benefit">
+        <h4>Organização dos Serviços</h4>
+        <p>Registre e organize todas as ordens de serviço da oficina, facilitando o acompanhamento das manutenções.</p>
+      </div>
+    </div>
+
+    <div class="card-benefit">
+      <img src="https://i.imgur.com/XmQuP6f.png" alt="Estoque">
+      <div class="info-benefit">
+        <h4>Controle de Peças</h4>
+        <p>Gerencie o estoque de peças utilizadas nos serviços, evitando faltas e melhorando o planejamento.</p>
+      </div>
+    </div>
+
+    <div class="card-benefit">
+      <img src="https://i.imgur.com/4hSJfJC.png" alt="Transparência">
+      <div class="info-benefit">
+        <h4>Transparência para o Cliente</h4>
+        <p>Permite que o cliente acompanhe o andamento da manutenção do seu veículo, trazendo mais confiança.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUEM SOMOS-->
+<section class="about">
+  <h3>Quem Somos</h3>
+
+  <div class="about-content">
+
+    <div class="texto">
+      <p>
+        O MecHub é um sistema web criado para ajudar oficinas mecânicas a organizar e gerenciar seus serviços de forma mais simples e eficiente. A plataforma permite registrar clientes, veículos, ordens de serviço e controlar o estoque de peças utilizadas nos reparos.
+      </p>
+
+      <p>
+        Nosso objetivo é facilitar a rotina da oficina, reunindo todas as informações em um único sistema, tornando a gestão mais prática, organizada e segura.
+      </p>
+
+      <p>
+        Além disso, buscamos oferecer mais transparência para os clientes, permitindo que acompanhem o andamento da manutenção de seus veículos e tenham acesso ao status dos serviços realizados. Dessa forma, contribuímos para uma comunicação clara e uma relação de confiança entre oficina e cliente.
+      </p>
+    </div>
+
+    <img src="https://i.imgur.com/Y1kRENw.png">
+
+  </div>
+</section>
+
+</body>
+</html>
